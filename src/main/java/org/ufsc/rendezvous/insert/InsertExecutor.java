@@ -7,6 +7,8 @@ import org.ufsc.rendezvous.access.DocumentAccess;
 import org.ufsc.rendezvous.access.GraphAccess;
 import org.ufsc.rendezvous.access.impl.MongoDBAccess;
 import org.ufsc.rendezvous.access.impl.Neo4JAccess;
+import org.ufsc.rendezvous.cache.CacheAccess;
+import org.ufsc.rendezvous.cache.impl.RedisAccess;
 import org.ufsc.rendezvous.concepts.Shape;
 import org.ufsc.rendezvous.concepts.Triple;
 import org.ufsc.rendezvous.dictionary.Dictionary;
@@ -25,6 +27,7 @@ public class InsertExecutor {
     private WorkloadStatistics statistics = new WorkloadStatistics();
     private Dictionary dictionary = new Dictionary();
     private Indexer indexer = new Indexer();
+    private CacheAccess cache = new RedisAccess();
 
     private DocumentFragmenter documentFragmenter = new DocumentFragmenter();
     private GraphFragmenter graphFragmenter = new GraphFragmenter();
@@ -62,8 +65,9 @@ public class InsertExecutor {
                 break;
         }
 
-        dictionary.updateDictionary(insertPlan.getTriple());
-        indexer.index(insertPlan.getTriple());
+        dictionary.updateDictionary(triple);
+        indexer.index(triple);
+        cache.put(triple);
     }
 
 }

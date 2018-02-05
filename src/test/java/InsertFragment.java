@@ -1,4 +1,6 @@
 import org.ufsc.rendezvous.concepts.*;
+import org.ufsc.rendezvous.concepts.spatioTemporal.SpatialResource;
+import org.ufsc.rendezvous.concepts.spatioTemporal.filter.SpatialFilter;
 import org.ufsc.rendezvous.insert.InsertExecutor;
 import org.ufsc.rendezvous.insert.InsertPlan;
 import org.ufsc.rendezvous.query.QueryExecutor;
@@ -30,7 +32,7 @@ public class InsertFragment {
 
         QueryPlan queryPlanStar = new QueryPlan();
         queryPlanStar.setBgps(createStarQuery());
-        queryPlanStar.setFilters(createFilter());
+        queryPlanStar.setFilters(createSpatialFilter());
         queryExecutor.execute(queryPlanStar);
 
         for(Triple t : createOptimizedGraph()) {
@@ -50,6 +52,7 @@ public class InsertFragment {
         Resource r3 = new Resource("3", "r3");
         Resource r4 = new Resource("4", "r4");
         Resource r5 = new Resource("5", "r5");
+        Resource g1 = new SpatialResource("5", "r5", "r5");
 
         List<Triple> triples = new ArrayList<>();
 
@@ -99,11 +102,11 @@ public class InsertFragment {
         return bgps;
     }
 
-    private static Set<Filter> createFilter(){
+    private static Set<Filter> createSpatialFilter(){
 
         Set<Filter> filters = new HashSet<>();
 
-        filters.add(new GeoFilter("r1", GeoFilter.Type.INTERSECTS, "r2"));
+        filters.add(new SpatialFilter("r1", SpatialFilter.Type.INTERSECTS, "r2"));
 
         return filters;
 

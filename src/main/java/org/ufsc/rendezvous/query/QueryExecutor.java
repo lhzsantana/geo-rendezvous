@@ -5,6 +5,8 @@ import org.apache.commons.collections4.map.MultiValueMap;
 import org.ufsc.rendezvous.access.DatabaseAccess;
 import org.ufsc.rendezvous.access.impl.MongoDBAccess;
 import org.ufsc.rendezvous.access.impl.Neo4JAccess;
+import org.ufsc.rendezvous.cache.CacheAccess;
+import org.ufsc.rendezvous.cache.impl.RedisAccess;
 import org.ufsc.rendezvous.concepts.BGP;
 import org.ufsc.rendezvous.concepts.Shape;
 import org.ufsc.rendezvous.concepts.Triple;
@@ -17,6 +19,7 @@ import java.util.Set;
 public class QueryExecutor {
 
     WorkloadStatistics statistics = new WorkloadStatistics();
+    private CacheAccess cache = new RedisAccess();
 
     private static final Integer STAR_THRESHOLD = 2;
 
@@ -39,6 +42,17 @@ public class QueryExecutor {
 
         statistics.registerQuery(resultSet, queryShape, queryPlan.getBgps().size());
 
+    }
+
+    private Set<Triple> checkCache(Set<BGP> bgps){
+
+        Set<Triple> resultSet = new HashSet<>();
+
+        for(BGP bgp: bgps){
+            resultSet.addAll(cache.get(bgp));
+        }
+
+        return resultSet;
     }
 
     private Shape decideShape(Set<BGP> bgps){

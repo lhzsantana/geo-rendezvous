@@ -1,10 +1,12 @@
-package org.ufsc.rendezvous.concepts;
+package org.ufsc.rendezvous.concepts.spatioTemporal;
 
-public class GeoResource extends Resource {
+import org.ufsc.rendezvous.concepts.Resource;
+
+public class SpatialResource extends Resource {
 
     private String location;
 
-    public GeoResource(String id, String value, String location) {
+    public SpatialResource(String id, String value, String location) {
         super(id, value);
     }
 

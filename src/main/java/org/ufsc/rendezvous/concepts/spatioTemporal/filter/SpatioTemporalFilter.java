@@ -1,8 +1,10 @@
-package org.ufsc.rendezvous.concepts;
+package org.ufsc.rendezvous.concepts.spatioTemporal.filter;
 
-public class GeoFilter extends Filter{
+import org.ufsc.rendezvous.concepts.Filter;
 
-    public GeoFilter(String field, Type type, String value) {
+public class SpatioTemporalFilter extends Filter {
+
+    public SpatioTemporalFilter(String field, Type type, String value) {
         super();
 
         this.type=type;
